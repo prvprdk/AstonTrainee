@@ -96,7 +96,7 @@ public class DefaultStudentService implements StudentService {
     private Student getStudent(ConnectionDB connectionDB, int id) {
 
         try (Connection connection = connectionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_STUDENT_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_STUDENT_BY_ID)) {
 
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();

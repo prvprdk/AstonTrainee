@@ -95,7 +95,7 @@ public class DefaultDirectionService implements DirectionService {
         Direction direction = null;
 
         try (Connection connection = connectionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_BY_ID)) {
 
             preparedStatement.setInt(1, id);
             ResultSet resultSetDirection = preparedStatement.executeQuery();

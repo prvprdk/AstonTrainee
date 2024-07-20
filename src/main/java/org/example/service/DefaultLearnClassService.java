@@ -93,7 +93,7 @@ public class DefaultLearnClassService implements LearnClassService {
     private LearnClass getLearnClass(ConnectionDB connectionDB, int id) {
 
         try (Connection connection = connectionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CLASS_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_CLASS_BY_ID)) {
 
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -118,7 +118,7 @@ public class DefaultLearnClassService implements LearnClassService {
         Set<Student> students = new HashSet<>();
 
         try (Connection connection = connectionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_STUDENTS_FOR_CLASS);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_STUDENTS_FOR_CLASS)
         ) {
 
             preparedStatement.setInt(1, id);
