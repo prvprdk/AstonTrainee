@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.db.ConnectionDB;
+import org.example.entity.Direction;
 import org.example.entity.LearnClass;
 import org.example.entity.Student;
 import org.example.servlets.payload.LearnClassUpdate;
@@ -14,7 +15,15 @@ import java.util.Set;
 
 public class DefaultLearnClassService implements LearnClassService {
 
-    private final static String SQL_FIND_CLASS_BY_ID = "SELECT * FROM class where id = ?";
+    private final static String SQL_FIND_CLASS_BY_ID = """
+            SELECT c.id AS id,
+             c.name AS name,
+              d.id AS id_direction,
+               d.name AS name_direction
+                FROM class c
+                JOIN direction d ON c.id_direction = d.id where c.id = ?;
+            """;
+
     private final static String SQL_ADD_STUDENT_TO_CLASS =
             "INSERT INTO class_student ( id_class, id_student) VALUES (?, ?)";
     private final static String SQL_FIND_STUDENTS_FOR_CLASS =
@@ -26,6 +35,7 @@ public class DefaultLearnClassService implements LearnClassService {
     @Override
     public void add(LearnClass direction) {
         ConnectionDB connectionDB = new ConnectionDB();
+
 
         try (Connection connection = connectionDB.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_CLASS);
@@ -102,6 +112,13 @@ public class DefaultLearnClassService implements LearnClassService {
                 LearnClass learnClass = new LearnClass();
                 learnClass.setId(resultSet.getInt("id"));
                 learnClass.setName(resultSet.getString("name"));
+
+                learnClass.setDirection(
+                        new Direction(
+                                resultSet.getInt("id_direction"),
+                                resultSet.getString("name_direction")
+                        )
+                );
 
                 learnClass.setStudents(setStudents(connectionDB, id));
 

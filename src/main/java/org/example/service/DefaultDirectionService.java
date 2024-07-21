@@ -100,6 +100,7 @@ public class DefaultDirectionService implements DirectionService {
             preparedStatement.setInt(1, id);
             ResultSet resultSetDirection = preparedStatement.executeQuery();
 
+
             if (resultSetDirection.next()) {
                 Direction directionFromDb = new Direction();
                 directionFromDb.setId(resultSetDirection.getInt("id"));
@@ -119,7 +120,7 @@ public class DefaultDirectionService implements DirectionService {
 
         Set<LearnClass> classes = new HashSet<>();
         try (Connection connection = connectionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_DIRECTION_CLASSES);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_DIRECTION_CLASSES)
         ) {
 
             preparedStatement.setInt(1, id);
