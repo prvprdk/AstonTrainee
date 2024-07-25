@@ -1,5 +1,6 @@
 package org.example.db;
 
+import javax.swing.text.html.parser.Entity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
