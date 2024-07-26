@@ -4,27 +4,28 @@ import jakarta.persistence.*;
 
 import java.util.Set;
 
-
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "audience")
+public class Audience {
     @Id
+
     @SequenceGenerator(name = "pet_seq",
             sequenceName = "global_seq ",
             initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_seq")
     @Column(name = "id")
     private int id;
+
     @Column(name = "name")
     private String name;
-    @ManyToMany
-    @JoinTable(name = "audience_student",
-            joinColumns = @JoinColumn(name = "id_student", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_audience", referencedColumnName = "id")
-    )
-    private Set<Audience> classes;
 
-    public Student() {
+    @ManyToOne()
+    private Direction direction;
+
+    @ManyToMany(mappedBy = "classes")
+    private Set<Student> students;
+
+    public Audience() {
     }
 
     public int getId() {
@@ -35,12 +36,20 @@ public class Student {
         this.id = id;
     }
 
-    public Set<Audience> getClasses() {
-        return classes;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setClasses(Set<Audience> classes) {
-        this.classes = classes;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public String getName() {
@@ -50,4 +59,6 @@ public class Student {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

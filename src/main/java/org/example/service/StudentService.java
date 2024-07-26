@@ -1,19 +1,18 @@
 package org.example.service;
 
 import org.example.entity.Student;
-import org.example.servlets.payload.UpdateStudent;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
-
     void add(Student student);
 
-    Set<Student> findAll();
+    void update(int id, Student student);
 
-    Student findById(int id);
+    void delete(int id);
 
-    void deleteById(int id);
+    Optional<Student> findById(int id);
 
-    void update(UpdateStudent update);
+    List<Student> findALl();
 }

@@ -6,58 +6,45 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.entity.Student;
-import org.example.service.DefaultStudentService;
 import org.example.service.StudentService;
-import org.example.servlets.payload.UpdateStudent;
+import org.example.service.imp.StudentServiceImp;
+import org.example.utils.Printer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
 
 @WebServlet(urlPatterns = "/student/*")
 public class StudentServlet extends HttpServlet {
-
-    StudentService studentService = new DefaultStudentService();
+    StudentService studentService = new StudentServiceImp();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PrintWriter writer = resp.getWriter();
 
-        if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo().substring(1));
+        try (PrintWriter writer = resp.getWriter()) {
 
-            try {
-                Student student = studentService.findById(id);
-                writer.write(student.toString());
-            } catch (NullPointerException ep) {
-                writer.write("Student not found");
+            if (req.getPathInfo() != null) {
+                try {
+                    int id = Integer.parseInt(req.getPathInfo().substring(1));
+                    Student student = studentService.findById(id).orElseThrow(NullPointerException::new);
+                    Printer.print(student, writer);
+                } catch (NullPointerException ep) {
+                    writer.println("Student not found");
+                }
+            } else {
+                Printer.printStudent(studentService.findALl(), writer);
             }
-        } else {
-            Set<Student> students = studentService.findAll();
-
-            for (Student st : students) {
-                writer.write(String.format("<b>id: %d Student:  %s </b> </br> ", st.getId(), st.getName()));
-            }
-
         }
+
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         Student student = new Student();
         student.setName(req.getParameter("name"));
         studentService.add(student);
-        resp.sendRedirect("/api/student");
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo().substring(1));
-            studentService.deleteById(id);
-        }
     }
 
     @Override
@@ -66,8 +53,15 @@ public class StudentServlet extends HttpServlet {
         if (req.getPathInfo() != null) {
             int id = Integer.parseInt(req.getPathInfo());
             String name = req.getParameter("name");
+            studentService.update(id, new Student());
+        }
+    }
 
-            studentService.update(new UpdateStudent(id, name));
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getPathInfo() != null) {
+            int id = Integer.parseInt(req.getPathInfo().substring(1));
+            studentService.delete(id);
         }
     }
 }

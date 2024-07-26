@@ -1,20 +1,17 @@
 package org.example.service;
 
 import org.example.entity.Direction;
-import org.example.servlets.payload.DirectionUpdate;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 public interface DirectionService {
-
-    Set<Direction> findAll();
-
     void add(Direction direction);
 
-    Direction findById(int id);
+    void update(int id, Direction direction);
 
-    void deleteById(int id);
+    void delete(int id);
 
-    void update(DirectionUpdate update);
-
+    Optional <Direction> findById(int id);
+    List<Direction> findALl();
 }

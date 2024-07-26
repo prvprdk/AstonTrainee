@@ -1,4 +1,4 @@
-package org.example.db;
+package org.example.config;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -10,9 +10,9 @@ public class FlyWayMigration implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
-        String url = "jdbc:postgresql://localhost:5432/my-db";
+        String url = "jdbc:postgresql://localhost:5432/my_db";
         String user = "postgres";
-        String password = "mysecretpassword";
+        String password = "password";
         Flyway flyway = Flyway.configure()
                 .dataSource(url, user, password)
                 .driver("org.postgresql.Driver")
