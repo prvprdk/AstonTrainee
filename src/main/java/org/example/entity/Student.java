@@ -2,7 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -22,7 +22,7 @@ public class Student {
             joinColumns = @JoinColumn(name = "id_student", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_audience", referencedColumnName = "id")
     )
-    private Set<Audience> classes;
+    private List<Audience> classes;
 
     public Student() {
     }
@@ -35,11 +35,11 @@ public class Student {
         this.id = id;
     }
 
-    public Set<Audience> getClasses() {
+    public List<Audience> getClasses() {
         return classes;
     }
 
-    public void setClasses(Set<Audience> classes) {
+    public void setClasses(List<Audience> classes) {
         this.classes = classes;
     }
 

@@ -12,17 +12,22 @@ public class DirectionServiceImp implements DirectionService {
 
     private final DirectionRepo directionRepo = new DirectionRepoImp();
 
+
     @Override
     public void add(Direction direction) {
         directionRepo.add(direction);
     }
 
     @Override
-    public void update(int id, Direction direction) {
+    public void update(int id, Direction updateDirection) {
+
+        directionRepo.update(updateDirection);
+
     }
 
     @Override
     public void delete(int id) {
+
         directionRepo.deleteById(id);
     }
 

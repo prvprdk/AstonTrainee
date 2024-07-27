@@ -42,26 +42,39 @@ public class StudentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Student student = new Student();
-        student.setName(req.getParameter("name"));
-        studentService.add(student);
+        if (req.getPathInfo() == null) {
+            Student student = new Student();
+            student.setName(req.getParameter("name"));
+            studentService.add(student);
+        }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo());
+            int id = Integer.parseInt(req.getPathInfo().substring(1));
             String name = req.getParameter("name");
-            studentService.update(id, new Student());
+
+            Student updateStudent = new Student();
+            updateStudent.setId(id);
+            updateStudent.setName(name);
+
+            studentService.update(id, updateStudent);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo().substring(1));
-            studentService.delete(id);
+            try (PrintWriter printWriter = resp.getWriter()) {
+                try {
+                    int id = Integer.parseInt(req.getPathInfo().substring(1));
+                    studentService.delete(id);
+                } catch (NullPointerException ep) {
+                    printWriter.println("Student does not exist");
+                }
+            }
         }
     }
 }

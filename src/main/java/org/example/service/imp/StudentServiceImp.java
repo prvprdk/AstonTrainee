@@ -18,7 +18,8 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public void update(int id, Student student) {
+    public void update(int id, Student updateStudent) {
+        studentRepo.update(updateStudent);
     }
 
     @Override

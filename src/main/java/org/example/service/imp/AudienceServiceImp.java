@@ -18,7 +18,8 @@ public class AudienceServiceImp implements AudienceService {
     }
 
     @Override
-    public void update(int id, Audience audience) {
+    public void update(int id, Audience updateAudience) {
+        audienceRepo.update(updateAudience);
     }
 
     @Override

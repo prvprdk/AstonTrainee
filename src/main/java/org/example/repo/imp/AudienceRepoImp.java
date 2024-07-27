@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class AudienceRepoImp implements AudienceRepo {
-    private final static String HQL_QUERY_BY_ID = "select a from Audience a LEFT JOIN FETCH a.students where a.id = :id ";
+    private final static String HQL_QUERY_BY_ID = """
+            select a from Audience a
+            LEFT JOIN FETCH a.students
+            LEFT JOIN FETCH a.direction
+             where a.id = :id
+            """;
 
     @Override
     public void add(Audience audience) {
@@ -25,11 +30,13 @@ public class AudienceRepoImp implements AudienceRepo {
     }
 
     @Override
-    public void update(Audience audience) {
+    public void update(Audience update) {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(audience);
+            Audience audience = Optional.of(session.find(Audience.class, update.getId())).orElseThrow(NullPointerException::new);
+            if (update.getName() != null) audience.setName(update.getName());
+
             transaction.commit();
         }
     }
@@ -39,7 +46,8 @@ public class AudienceRepoImp implements AudienceRepo {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("delete Audience where id = :id", Audience.class).setParameter("id", id).executeUpdate();
+            Audience audience = Optional.of(session.find(Audience.class, id)).orElseThrow(NullPointerException::new);
+            session.remove(audience);
             transaction.commit();
         }
 

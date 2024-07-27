@@ -31,7 +31,7 @@ public class AudienceServlet extends HttpServlet {
                     Audience audience = audienceService.findById(id).orElseThrow(NullPointerException::new);
                     Printer.print(audience, writer);
                 } catch (NullPointerException ep) {
-                    writer.println("Direction not found");
+                    writer.println("Audience not found");
                 }
 
             } else {
@@ -39,31 +39,52 @@ public class AudienceServlet extends HttpServlet {
                 Printer.printAudi(aLl, writer);
             }
         }
-}
-
-@Override
-protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    Audience audience = new Audience();
-    audience.setName(req.getParameter("name"));
-    audienceService.add(audience);
-}
-
-@Override
-protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    if (req.getPathInfo() != null) {
-        int id = Integer.parseInt(req.getPathInfo());
-        String name = req.getParameter("name");
-        audienceService.update(id, new Audience());
     }
-}
 
-@Override
-protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (req.getPathInfo() != null) {
-        int id = Integer.parseInt(req.getPathInfo().substring(1));
-        audienceService.delete(id);
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if (req.getPathInfo() == null) {
+            Audience audience = new Audience();
+            Direction direction = new Direction();
+
+            audience.setName(req.getParameter("name"));
+            direction.setId(Integer.parseInt(req.getParameter("direction")));
+
+            audience.setDirection(direction);
+            audienceService.add(audience);
+        }
     }
-}
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if (req.getPathInfo() != null) {
+
+            int id = Integer.parseInt(req.getPathInfo().substring(1));
+            Audience updateAudience = new Audience();
+            String name = req.getParameter("name");
+
+            updateAudience.setId(id);
+            updateAudience.setName(name);
+
+            audienceService.update(id, updateAudience);
+
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if (req.getPathInfo() != null) {
+            try (PrintWriter printWriter = resp.getWriter()) {
+                try {
+                    int id = Integer.parseInt(req.getPathInfo().substring(1));
+                    audienceService.delete(id);
+                } catch (NullPointerException ep) {
+                    printWriter.println("Audience does not exist");
+                }
+            }
+        }
+    }
 }

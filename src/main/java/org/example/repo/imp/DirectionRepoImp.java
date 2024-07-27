@@ -6,12 +6,15 @@ import org.example.repo.DirectionRepo;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 public class DirectionRepoImp implements DirectionRepo {
-    private final static String HQL_QUERY_BY_ID = "select a from Direction a LEFT JOIN FETCH a.audiences where a.id = :id ";
+    private final static String HQL_QUERY_BY_ID = """
+            select a from Direction a
+            LEFT JOIN FETCH a.audiences
+            where a.id = :id
+            """;
 
     @Override
     public void add(Direction direction) {
@@ -26,11 +29,16 @@ public class DirectionRepoImp implements DirectionRepo {
     }
 
     @Override
-    public void update(Direction direction) {
+    public void update(Direction updatedirection) {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(direction);
+            Direction direction = Optional.of(session.find(Direction.class, updatedirection.getId())).orElseThrow(NullPointerException::new);
+
+            if (updatedirection.getNameDirection() != null)
+                direction.setNameDirection(updatedirection.getNameDirection());
+            if (updatedirection.getDescription() != null) direction.setDescription(updatedirection.getDescription());
+
             transaction.commit();
         }
 
@@ -42,7 +50,8 @@ public class DirectionRepoImp implements DirectionRepo {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("delete Direction where id = :id", Direction.class).setParameter("id", id).executeUpdate();
+            Direction direction = Optional.of(session.find(Direction.class, id)).orElseThrow(NullPointerException::new);
+            session.remove(direction);
             transaction.commit();
         }
 
@@ -53,9 +62,9 @@ public class DirectionRepoImp implements DirectionRepo {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
 
-           List<Direction> resultList = session.createQuery(HQL_QUERY_BY_ID, Direction.class).setParameter("id", id).getResultList();
-           if (resultList.isEmpty()) return Optional.empty();
-          return Optional.ofNullable(resultList.get(0));
+            List<Direction> resultList = session.createQuery(HQL_QUERY_BY_ID, Direction.class).setParameter("id", id).getResultList();
+            if (resultList.isEmpty()) return Optional.empty();
+            return Optional.ofNullable(resultList.get(0));
 
         }
     }

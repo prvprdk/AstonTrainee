@@ -2,7 +2,8 @@ create sequence global_seq start 1 increment 1;
 
 create table IF NOT EXISTS direction (
           id int  primary key default nextval ('global_seq'),
-          name varchar (30)
+          name varchar (30),
+          description varchar (100)
 );
 create table IF NOT EXISTS audience (
             id int  primary key default nextval ('global_seq'),

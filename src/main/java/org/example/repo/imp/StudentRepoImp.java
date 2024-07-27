@@ -12,7 +12,8 @@ import java.util.Optional;
 public class StudentRepoImp implements StudentRepo {
     private final static String HQL_QUERY_BY_ID = """
             select a from Student a
-            LEFT JOIN FETCH a.classes
+            LEFT JOIN FETCH a.classes c
+            LEFT JOIN FETCH c.direction
             where a.id = :id
             """;
 
@@ -27,11 +28,13 @@ public class StudentRepoImp implements StudentRepo {
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Student updateStudent) {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(student);
+            Student student = Optional.of(session.find(Student.class, updateStudent.getId())).orElseThrow(NullPointerException::new);
+            if (updateStudent.getName() != null) student.setName(updateStudent.getName());
+
             transaction.commit();
         }
     }
@@ -41,7 +44,8 @@ public class StudentRepoImp implements StudentRepo {
 
         try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("delete Student where id = :id", Student.class).setParameter("id", id).executeUpdate();
+            Student student = Optional.of(session.find(Student.class, id)).orElseThrow(NullPointerException::new);
+            session.remove(student);
             transaction.commit();
         }
 

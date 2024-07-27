@@ -12,7 +12,6 @@ import org.example.utils.Printer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 @WebServlet(urlPatterns = "/direction/*")
 public class DirectionServlet extends HttpServlet {
@@ -32,8 +31,7 @@ public class DirectionServlet extends HttpServlet {
                     writer.println("Direction not found");
                 }
             } else {
-                List<Direction> aLl = directionService.findALl();
-                Printer.print(aLl, writer);
+                Printer.print(directionService.findALl(), writer);
             }
         }
     }
@@ -41,26 +39,41 @@ public class DirectionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Direction direction = new Direction();
-        direction.setNameDirection(req.getParameter("name"));
-        directionService.add(direction);
+        if (req.getPathInfo() == null) {
+            Direction direction = new Direction();
+            direction.setNameDirection(req.getParameter("name"));
+            direction.setDescription(req.getParameter("description"));
+            directionService.add(direction);
+        }
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo());
+            int id = Integer.parseInt(req.getPathInfo().substring(1));
             String name = req.getParameter("name");
-            directionService.update(id, new Direction());
+
+            Direction updateDirection = new Direction();
+            updateDirection.setId(id);
+            updateDirection.setNameDirection(name);
+            updateDirection.setDescription(req.getParameter("description"));
+
+            directionService.update(id, updateDirection);
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() != null) {
-            int id = Integer.parseInt(req.getPathInfo().substring(1));
-            directionService.delete(id);
+            try (PrintWriter printWriter = resp.getWriter()) {
+                try {
+                    int id = Integer.parseInt(req.getPathInfo().substring(1));
+                    directionService.delete(id);
+                } catch (NullPointerException ep) {
+                    printWriter.println("Direction does not exist");
+                }
+            }
         }
     }
 }

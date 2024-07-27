@@ -2,7 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "audience")
@@ -23,7 +23,7 @@ public class Audience {
     private Direction direction;
 
     @ManyToMany(mappedBy = "classes")
-    private Set<Student> students;
+    private List<Student> students;
 
     public Audience() {
     }
@@ -36,11 +36,11 @@ public class Audience {
         this.id = id;
     }
 
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 

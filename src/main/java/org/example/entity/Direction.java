@@ -17,15 +17,25 @@ public class Direction {
     private int id;
     @Column(name = "name")
     private String nameDirection;
-    @OneToMany (mappedBy = "direction")
+    @Column(name = "description")
+    private String description;
+    @OneToMany(mappedBy = "direction")
     private List<Audience> audiences;
+
     public Direction() {
     }
 
 
-
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setId(int id) {
