@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.entity.DistantStudent;
 import org.example.entity.Student;
 import org.example.service.StudentService;
 import org.example.service.imp.StudentServiceImp;
@@ -43,7 +44,11 @@ public class StudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (req.getPathInfo() == null) {
-            Student student = new Student();
+
+            //пример дбоавление для одного из наследников Student
+            DistantStudent student = new DistantStudent();
+            student.setTimeZone(req.getParameter("timeZone"));
+            student.setCity(req.getParameter("city"));
             student.setName(req.getParameter("name"));
             studentService.add(student);
         }

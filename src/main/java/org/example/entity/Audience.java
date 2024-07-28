@@ -22,7 +22,7 @@ public class Audience {
     @ManyToOne()
     private Direction direction;
 
-    @ManyToMany(mappedBy = "classes")
+    @ManyToMany(mappedBy = "classes", cascade = CascadeType.ALL)
     private List<Student> students;
 
     public Audience() {

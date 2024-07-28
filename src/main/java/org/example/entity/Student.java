@@ -6,6 +6,7 @@ import java.util.List;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "student")
 public class Student {
     @Id
@@ -17,7 +18,7 @@ public class Student {
     private int id;
     @Column(name = "name")
     private String name;
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "audience_student",
             joinColumns = @JoinColumn(name = "id_student", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_audience", referencedColumnName = "id")

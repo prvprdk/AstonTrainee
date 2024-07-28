@@ -3,9 +3,7 @@ package org.example.config;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import org.example.entity.Audience;
-import org.example.entity.Direction;
-import org.example.entity.Student;
+import org.example.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -19,6 +17,8 @@ public class SessionFactoryConfigure implements ServletContextListener {
                 .addAnnotatedClass(Direction.class)
                 .addAnnotatedClass(Audience.class)
                 .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(LocalStudent.class)
+                .addAnnotatedClass(DistantStudent.class)
                 .buildSessionFactory();
     }
 

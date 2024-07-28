@@ -19,7 +19,7 @@ public class Direction {
     private String nameDirection;
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "direction")
+    @OneToMany(mappedBy = "direction",cascade = CascadeType.REMOVE)
     private List<Audience> audiences;
 
     public Direction() {
