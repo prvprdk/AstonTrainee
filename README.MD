@@ -4,11 +4,10 @@ Stack:
 <li>
 Servlet API
 <li>
-JDBC
+Hibernate
 <li>
 Postgres
-<li>
-FlyWay
+
 
 ### GET METHOD
 
@@ -16,7 +15,7 @@ FlyWay
 |--------|-----------------|---------------------|
 | GET    | /api/direction  | get all directions  |
 | GET    | api/direction/* | get direction by id |
-| GET    | api/class/*     | get class by id     |
+| GET    | api/audience/*  | get audience by id  |
 | GET    | api/student     | get students        |
 | GET    | api/student/*   | get student by id   |
 
@@ -26,15 +25,14 @@ FlyWay
 |--------|-----------------------|----------------------|
 | POST   | /api/direction        | add new Direction    |
 | POST   | api/student           | add new Student      |
-| POST   | api/class             | add new Class        |
-| POST   | api/addStudentToClass | add Student to Class |
+| POST   | api/audience          | add new Audience     |
 
 ### PUT METHOD
 
 | METHOD | PATH             | DESCRIPTION      |
 |--------|------------------|------------------|
 | PUT    | /api/direction/* | update Direction |
-| PUT    | api/"/class/*    | update Class     |
+| PUT    | api/"/audience/* | update Audience  |
 | PUT    | api/student/*    | update Student   |
 
 ### DELETE METHOD
@@ -42,7 +40,7 @@ FlyWay
 | METHOD | PATH             | DESCRIPTION      |
 |--------|------------------|------------------|
 | DELETE | /api/direction/* | delete Direction |
-| DELETE | api/class/*      | delete Class     |
+| DELETE | api/audience/*   | delete Audience  |
 | DELETE | api/student/*    | delete Student   |
 
 
