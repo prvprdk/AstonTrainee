@@ -9,6 +9,8 @@ public class LocalStudent extends Student {
     private String area;
 
 
+
+
     public String getArea() {
         return area;
     }

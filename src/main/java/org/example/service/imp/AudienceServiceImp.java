@@ -2,15 +2,22 @@ package org.example.service.imp;
 
 import org.example.entity.Audience;
 import org.example.repo.AudienceRepo;
-import org.example.repo.imp.AudienceRepoImp;
 import org.example.service.AudienceService;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class AudienceServiceImp implements AudienceService {
 
-    private final AudienceRepo audienceRepo = new AudienceRepoImp();
+
+    private final AudienceRepo audienceRepo;
+
+
+    public AudienceServiceImp(AudienceRepo audienceRepo) {
+        this.audienceRepo = audienceRepo;
+    }
 
     @Override
     public void add(Audience audience) {
@@ -23,7 +30,7 @@ public class AudienceServiceImp implements AudienceService {
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteById(int id) {
         audienceRepo.deleteById(id);
     }
 

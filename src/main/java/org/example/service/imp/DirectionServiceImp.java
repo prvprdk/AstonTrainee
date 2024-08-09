@@ -2,15 +2,21 @@ package org.example.service.imp;
 
 import org.example.entity.Direction;
 import org.example.repo.DirectionRepo;
-import org.example.repo.imp.DirectionRepoImp;
 import org.example.service.DirectionService;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class DirectionServiceImp implements DirectionService {
 
-    private final DirectionRepo directionRepo = new DirectionRepoImp();
+
+    private final DirectionRepo directionRepo;
+
+    public DirectionServiceImp(DirectionRepo directionRepo) {
+        this.directionRepo = directionRepo;
+    }
 
 
     @Override
@@ -26,7 +32,7 @@ public class DirectionServiceImp implements DirectionService {
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteById(int id) {
 
         directionRepo.deleteById(id);
     }
@@ -37,7 +43,7 @@ public class DirectionServiceImp implements DirectionService {
     }
 
     @Override
-    public List<Direction> findALl() {
+    public List<Direction> findAll() {
         return directionRepo.findAll();
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "student")
-public class Student {
+public abstract class Student {
     @Id
     @SequenceGenerator(name = "pet_seq",
             sequenceName = "global_seq ",

@@ -2,15 +2,20 @@ package org.example.service.imp;
 
 import org.example.entity.Student;
 import org.example.repo.StudentRepo;
-import org.example.repo.imp.StudentRepoImp;
 import org.example.service.StudentService;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class StudentServiceImp implements StudentService {
 
-    private final StudentRepo studentRepo = new StudentRepoImp();
+    private final StudentRepo studentRepo;
+
+    public StudentServiceImp(StudentRepo studentRepo) {
+        this.studentRepo = studentRepo;
+    }
 
     @Override
     public void add(Student student) {
@@ -18,12 +23,12 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public void update(int id, Student updateStudent) {
-        studentRepo.update(updateStudent);
+    public void update(int id, Student student) {
+        studentRepo.update(student);
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteById(int id) {
         studentRepo.deleteById(id);
     }
 
@@ -33,7 +38,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public List<Student> findALl() {
+    public List<Student> findAll() {
         return studentRepo.findAll();
     }
 }

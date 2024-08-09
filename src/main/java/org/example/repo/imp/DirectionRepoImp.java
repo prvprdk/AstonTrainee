@@ -1,25 +1,34 @@
 package org.example.repo.imp;
 
-import org.example.config.SessionFactoryConfigure;
 import org.example.entity.Direction;
 import org.example.repo.DirectionRepo;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
+@Qualifier("directionRepo")
 public class DirectionRepoImp implements DirectionRepo {
+
     private final static String HQL_QUERY_BY_ID = """
             select a from Direction a
-            LEFT JOIN FETCH a.audiences
+            JOIN FETCH a.audiences
             where a.id = :id
             """;
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public void add(Direction direction) {
 
-        try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
             Transaction transaction = session.beginTransaction();
             session.persist(direction);
@@ -31,7 +40,7 @@ public class DirectionRepoImp implements DirectionRepo {
     @Override
     public void update(Direction updatedirection) {
 
-        try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             Direction direction = Optional.of(session.find(Direction.class, updatedirection.getId())).orElseThrow(NullPointerException::new);
 
@@ -48,9 +57,11 @@ public class DirectionRepoImp implements DirectionRepo {
     @Override
     public void deleteById(Integer id) {
 
-        try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
+
+        try (Session session = sessionFactory.openSession()) {
+
             Transaction transaction = session.beginTransaction();
-            Direction direction = Optional.of(session.find(Direction.class, id)).orElseThrow(NullPointerException::new);
+            Direction direction = Optional.of(session.find(Direction.class, id)).orElseThrow(() -> new NullPointerException("oops"));
             session.remove(direction);
             transaction.commit();
         }
@@ -60,7 +71,7 @@ public class DirectionRepoImp implements DirectionRepo {
     @Override
     public Optional<Direction> findById(Integer id) {
 
-        try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
 
             List<Direction> resultList = session.createQuery(HQL_QUERY_BY_ID, Direction.class).setParameter("id", id).getResultList();
             if (resultList.isEmpty()) return Optional.empty();
@@ -71,7 +82,7 @@ public class DirectionRepoImp implements DirectionRepo {
 
     @Override
     public List<Direction> findAll() {
-        try (Session session = SessionFactoryConfigure.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("select a from Direction a", Direction.class).getResultList();
         }
     }

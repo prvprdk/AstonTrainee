@@ -11,6 +11,7 @@ public class DistantStudent extends Student {
     private String timeZone;
 
 
+
     public String getCity() {
         return city;
     }

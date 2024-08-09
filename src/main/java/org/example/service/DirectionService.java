@@ -1,17 +1,9 @@
 package org.example.service;
 
 import org.example.entity.Direction;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+@Component
+public interface DirectionService extends Service<Direction, Integer> {
 
-public interface DirectionService {
-    void add(Direction direction);
-
-    void update(int id, Direction direction);
-
-    void delete(int id);
-
-    Optional <Direction> findById(int id);
-    List<Direction> findALl();
 }

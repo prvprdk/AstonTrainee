@@ -1,18 +1,9 @@
 package org.example.service;
 
 import org.example.entity.Student;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+@Component
+public interface StudentService extends Service <Student, Integer> {
 
-public interface StudentService {
-    void add(Student student);
-
-    void update(int id, Student student);
-
-    void delete(int id);
-
-    Optional<Student> findById(int id);
-
-    List<Student> findALl();
 }
